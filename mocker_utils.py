@@ -205,10 +205,26 @@ class Mocker:
 
         @classmethod
         def _string_lower(cls, length=random.randint(1, 9)) -> str:
+            return cls.__get_string_by_source(string.ascii_lowercase, length)
+
+        @classmethod
+        def __get_string_by_source(cls, source, length):
             length = 1 if length < 1 else length
-            en_list = random.sample(string.ascii_lowercase, length)
-            random.shuffle(en_list)
-            return tuple_to_str(en_list)
+            str_list = random.sample(source, length)
+            random.shuffle(str_list)
+            return tuple_to_str(str_list)
+
+        @classmethod
+        def _string_upper(cls, length=random.randint(1, 9)) -> str:
+            return cls.__get_string_by_source(string.ascii_uppercase, length)
+
+        @classmethod
+        def _string_number(cls, length=random.randint(1, 9)) -> str:
+            return cls.__get_string_by_source(string.digits, length)
+
+        @classmethod
+        def _string_symbol(cls, length=random.randint(1, 9)) -> str:
+            return cls.__get_string_by_source(string.punctuation, length)
 
         @classmethod
         def string(cls, *args) -> str:
@@ -224,6 +240,12 @@ class Mocker:
                 length = args[1]
                 if string_type == 'lower':
                     return cls._string_lower(length)
+                elif string_type == 'upper':
+                    return cls._string_upper(length)
+                elif string_type == 'number':
+                    return cls._string_number(length)
+                elif string_type == 'symbol':
+                    return cls._string_symbol(length)
             elif len(args) > 2:
                 raise MockerExpressionException('only two parameters are allowed.')
             else:

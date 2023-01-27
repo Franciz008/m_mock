@@ -14,4 +14,4 @@ def test():
     print(mocker.mocker("""@pick('("1",2,"3")')"""))
     print(mocker.basic.string())
     print(mocker.mocker("""@string(2)"""))
-    print(mocker.mocker("""@string("lower", 5)"""))
+    print(mocker.mocker("""@string("symbol", 2)"""))
