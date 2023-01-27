@@ -1,11 +1,20 @@
 import random
 import re
+import string
 
 from datetime import datetime, timedelta
 
 
 def inNone(obj):
     return obj in ('', None)
+
+
+def tuple_to_str(objects) -> str:
+    """
+    :param objects: 被转换的元组/列表
+    :return: 列表被转换后的字符串
+    """
+    return ''.join(objects)
 
 
 class Mocker:
@@ -160,14 +169,16 @@ class Mocker:
 
             :param min_value: 最小值,默认值:0
             :param max_value: 最大值,默认值:9999999999999999
-            :return: 自然数
+            :return: 自然数[min_value,max_value]
             """
             if inNone(min_value):
                 min_value = -9999999999999999
             if inNone(max_value):
                 max_value = 9999999999999999
-            if min_value >= max_value:
+            if min_value > max_value:
                 raise MockerExpressionException()
+            elif min_value == max_value:
+                return min_value
             return random.randint(min_value, max_value)
 
         @classmethod
@@ -189,6 +200,32 @@ class Mocker:
             :return: 从1开始的整数类型的随机数;[start_number,end_number] 取值范围为闭区间
             """
             return random.randint(start_number if start_number != 0 else 1, end_number if end_number != 1 else 2)
+
+        @classmethod
+        def string(cls, length: int = random.randint(1, 9)) -> str:
+            """
+
+            :param length: 返回字符的长度
+            :return: 随机长度的英,数,英文标点符号的混合字符
+            """
+            length2 = None
+            if length < 3:
+                length2 = length
+                length = 3
+            length2 = 1 if length2 is not None and length2 < 1 else length2
+            en_len = cls.integer(1, length - 2)
+            num_len = cls.integer(1, length - 1 - en_len)
+            punctuation_len = length - en_len - num_len
+            en_list = random.sample(string.ascii_letters, en_len)
+            num_list = random.sample(string.digits, num_len)
+            punctuation_list = random.sample(string.punctuation, punctuation_len)
+            string_list = en_list + num_list + punctuation_list
+            random.shuffle(string_list)
+            strings = tuple_to_str(string_list)
+            if inNone(length2):
+                return strings
+            else:
+                return strings[:length2]
 
     basic = Basic()
 
