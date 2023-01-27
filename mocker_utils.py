@@ -204,12 +204,30 @@ class Mocker:
             return random.randint(start_number if start_number != 0 else 1, end_number if end_number != 1 else 2)
 
         @classmethod
-        def string(cls, length: int = random.randint(1, 9)) -> str:
+        def _string_lower(cls, length=random.randint(1, 9)) -> str:
+            length = 1 if length < 1 else length
+            en_list = random.sample(string.ascii_lowercase, length)
+            random.shuffle(en_list)
+            return tuple_to_str(en_list)
+
+        @classmethod
+        def string(cls, *args) -> str:
             """
 
-            :param length: 返回字符的长度
+            :param args: 参数,例如:返回字符的长度
             :return: 随机长度的英,数,英文标点符号的混合字符
             """
+            if len(args) == 1 and isinstance(args[0], int):
+                length = args[0]
+            elif len(args) == 2:
+                string_type = args[0]
+                length = args[1]
+                if string_type == 'lower':
+                    return cls._string_lower(length)
+            elif len(args) > 2:
+                raise MockerExpressionException('only two parameters are allowed.')
+            else:
+                length = random.randint(1, 9)
             length2 = None
             if length < 3:
                 length2 = length
