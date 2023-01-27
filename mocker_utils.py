@@ -32,6 +32,8 @@ class Mocker:
             return self.basic.integer(*args)
         elif keyword == 'boolean':
             return self.basic.boolean(*args)
+        elif keyword == 'string':
+            return self.basic.string(*args)
         elif keyword == 'pick':
             return self.helper.pick(*args)
         return None

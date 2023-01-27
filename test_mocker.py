@@ -12,3 +12,5 @@ def test():
     # print(mocker.date.time('', '+4sec'))
     print(mocker.Helper().pick('(1,2,3)'))
     print(mocker.mocker("""@pick('("1",2,"3")')"""))
+    print(mocker.basic.string())
+    print(mocker.mocker("""@string(2)"""))
