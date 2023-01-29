@@ -1,8 +1,13 @@
 import random
+
+import random_ex
 import re
 import string
 
 from datetime import datetime, timedelta
+
+from random_ex import basic
+from random_ex.common import MockerExpressionException
 
 
 def inNone(obj):
@@ -14,10 +19,10 @@ def tuple_to_str(objects) -> str:
     :param objects: 被转换的元组/列表
     :return: 列表被转换后的字符串
     """
-    return ''.join(objects)
+    return str(''.join(objects))
 
 
-class Mocker:
+class MockPy:
 
     def mocker(self, mock_str):
         keyword = self.get_mocker_key(mock_str)
@@ -33,7 +38,7 @@ class Mocker:
         elif keyword == 'boolean':
             return self.basic.boolean(*args)
         elif keyword == 'string':
-            return self.basic.string(*args)
+            return basic.String.string(*args)
         elif keyword == 'pick':
             return self.helper.pick(*args)
         return None
@@ -203,72 +208,6 @@ class Mocker:
             """
             return random.randint(start_number if start_number != 0 else 1, end_number if end_number != 1 else 2)
 
-        @classmethod
-        def _string_lower(cls, length=random.randint(1, 9)) -> str:
-            return cls.__get_string_by_source(string.ascii_lowercase, length)
-
-        @classmethod
-        def __get_string_by_source(cls, source, length):
-            length = 1 if length < 1 else length
-            str_list = random.sample(source, length)
-            random.shuffle(str_list)
-            return tuple_to_str(str_list)
-
-        @classmethod
-        def _string_upper(cls, length=random.randint(1, 9)) -> str:
-            return cls.__get_string_by_source(string.ascii_uppercase, length)
-
-        @classmethod
-        def _string_number(cls, length=random.randint(1, 9)) -> str:
-            return cls.__get_string_by_source(string.digits, length)
-
-        @classmethod
-        def _string_symbol(cls, length=random.randint(1, 9)) -> str:
-            return cls.__get_string_by_source(string.punctuation, length)
-
-        @classmethod
-        def string(cls, *args) -> str:
-            """
-
-            :param args: 参数,例如:返回字符的长度
-            :return: 随机长度的英,数,英文标点符号的混合字符
-            """
-            if len(args) == 1 and isinstance(args[0], int):
-                length = args[0]
-            elif len(args) == 2:
-                string_type = args[0]
-                length = args[1]
-                if string_type == 'lower':
-                    return cls._string_lower(length)
-                elif string_type == 'upper':
-                    return cls._string_upper(length)
-                elif string_type == 'number':
-                    return cls._string_number(length)
-                elif string_type == 'symbol':
-                    return cls._string_symbol(length)
-            elif len(args) > 2:
-                raise MockerExpressionException('only two parameters are allowed.')
-            else:
-                length = random.randint(1, 9)
-            length2 = None
-            if length < 3:
-                length2 = length
-                length = 3
-            length2 = 1 if length2 is not None and length2 < 1 else length2
-            en_len = cls.integer(1, length - 2)
-            num_len = cls.integer(1, length - 1 - en_len)
-            punctuation_len = length - en_len - num_len
-            en_list = random.sample(string.ascii_letters, en_len)
-            num_list = random.sample(string.digits, num_len)
-            punctuation_list = random.sample(string.punctuation, punctuation_len)
-            string_list = en_list + num_list + punctuation_list
-            random.shuffle(string_list)
-            strings = tuple_to_str(string_list)
-            if inNone(length2):
-                return strings
-            else:
-                return strings[:length2]
-
     basic = Basic()
 
     class Date:
@@ -378,13 +317,4 @@ class Mocker:
     helper = Helper()
 
 
-class MockerExpressionException(Exception):
-    def __init__(self, exception='Incorrect mocker expression is used.', remark=''):
-        super().__init__()
-        self.exception = f'{exception}{remark}'
-
-    def __str__(self):
-        return self.exception
-
-
-mocker = Mocker()
+mocker = MockPy()
