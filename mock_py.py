@@ -1,13 +1,9 @@
 import random
-
-import random_ex
 import re
-import string
-
 from datetime import datetime, timedelta
 
-from random_ex import basic
-from random_ex.common import MockerExpressionException
+from random_ow import basic
+from random_ow.common import MockerExpressionException
 
 
 def inNone(obj):
@@ -30,7 +26,7 @@ class MockPy:
         if keyword == 'date':
             return self.date.date(*args)
         elif keyword == 'float':
-            return self.basic.float(*args)
+            return basic.FloatOw.float(*args)
         elif keyword == 'natural':
             return self.basic.natural(*args)
         elif keyword == 'integer':
@@ -38,7 +34,7 @@ class MockPy:
         elif keyword == 'boolean':
             return self.basic.boolean(*args)
         elif keyword == 'string':
-            return basic.String.string(*args)
+            return basic.StringOw.string(*args)
         elif keyword == 'pick':
             return self.helper.pick(*args)
         return None
@@ -92,55 +88,13 @@ class MockPy:
                 return not current
 
         @classmethod
-        def float(cls, min_value=None, max_value=None, dmin_value=None,
-                  dmax_value=None):
-            """
-            随机浮点数,example:
-            @float(95,100,12,19)
-            @float(1,2)
-            @float(952)  # 不小于992
-            @float()  # 随机
-            @float
-            :param min_value:个位部分最小值
-            :param max_value:个位部分最大值
-            :param dmin_value:小数部分最小长度
-            :param dmax_value:小数部分最大长度
-            :return:
-            """
-
-            def __luck():
-                return random.randint(1, 4) in (1, 2, 3)
-
-            if inNone(min_value):
-                min_value = -9999999999999999
-            if inNone(max_value):
-                max_value = 9999999999999999
-            if inNone(dmin_value):
-                dmin_value = random.randint(2, 5) if random.randint(1, 2) == 1 else 0
-            if inNone(dmax_value):
-                min_dmax_value = dmin_value if 14 > dmin_value > 0 else dmin_value + 1
-                dmax_value = random.randint(min_dmax_value + 1, 16)
-            decimals = cls.number_str(min_length=dmin_value, max_length=dmax_value)
-            if __luck():
-                while True:
-                    # 满足最小值和最大值的浮点数
-                    random_float = random.uniform(min_value, max_value)
-                    val = str(random_float)
-                    if '.' in val:
-                        break
-                int_part = val.split(".")[0]
-                int_part = int_part if len(int_part) + len(decimals) <= 15 else int_part[:len(decimals)]
-                val = f'{int_part}.{decimals}'
-                random_float = float(val)
-            else:
-                random_float = random.uniform(min_value, max_value)
-                if __luck():
-                    random_float = float(f'{str(random_float)[:-1]}{random.randint(1, 9)}')
-            round_num = random.randint(dmin_value, dmax_value)
-            return float(round(random_float, round_num))
-
-        @classmethod
         def number_str(cls, min_length=None, max_length=number_str_max_length) -> str:
+            """
+
+            :param min_length:
+            :param max_length:
+            :return: 随机长度的数字字符
+            """
             if min_length >= max_length:
                 raise MockerExpressionException()
             if inNone(min_length):

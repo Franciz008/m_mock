@@ -1,4 +1,10 @@
 def inNone(obj):
+    if isinstance(obj, (tuple, list)):
+        # 只要有一个是空的就返回True
+        boo = []
+        for i in obj:
+            boo.append(i in ('', None))
+        return True if True in boo else False
     return obj in ('', None)
 
 

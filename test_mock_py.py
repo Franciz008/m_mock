@@ -1,12 +1,12 @@
 from mock_py import mocker
-from random_ex import basic
+from random_ow import basic
 
 
 def execute(params):
     print(f"{params}:{mocker.mocker(params)}")
 
 
-def test_basic_string():
+def test_basic_float():
     # for i in range(20):
     #     print(i, mocker.basic.boolean(1, 5, False))
     # print(mocker.mocker("@boolean(1, 5, False)"))
@@ -17,9 +17,13 @@ def test_basic_string():
     # print(mocker.date.time('', '+4sec'))
     # print(mocker.Helper().pick('(1,2,3)'))
     # print(mocker.mocker("""@pick('("1",2,"3")')"""))
-    print(basic.String.string())
-    print(basic.String.string(7))
-    print(basic.String.string(7, 10))
+    execute("@float(2,4)")
+
+
+def test_basic_string():
+    print(basic.StringOw.string())
+    print(basic.StringOw.string(7))
+    print(basic.StringOw.string(7, 10))
     execute("@string(2)")
     execute('@string("lower", 3)')
     execute('@string("upper", 3)')
@@ -31,3 +35,7 @@ def test_basic_string():
     execute('@string("number", 1, 3)')
     execute('@string("symbol", 1, 3)')
     execute('@string("aeiou", 1, 3)')
+    execute('@string("chinese", 1, 3)')
+    execute('@string("cn_symbol", 1, 3)')
+    execute('@string("cn_string", 3, 9)')
+    execute('@string("cn_string", 1)')
