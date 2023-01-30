@@ -3,7 +3,7 @@ import re
 from datetime import datetime, timedelta
 
 from random_ow import basic
-from random_ow.common import MockerExpressionException
+from random_ow.common import MockPyExpressionException, mock_exception
 
 
 def inNone(obj):
@@ -28,11 +28,13 @@ class MockPy:
         elif keyword == 'float':
             return basic.FloatOw.float(*args)
         elif keyword == 'natural':
-            return self.basic.natural(*args)
+            return basic.NaturalOw.natural(*args)
         elif keyword == 'integer':
-            return self.basic.integer(*args)
+            return basic.IntegerOw.integer(*args)
         elif keyword == 'boolean':
-            return self.basic.boolean(*args)
+            return basic.BooleanOw.boolean(*args)
+        elif keyword == 'character':
+            return basic.CharacterOw.character(*args)
         elif keyword == 'string':
             return basic.StringOw.string(*args)
         elif keyword == 'pick':
@@ -42,7 +44,7 @@ class MockPy:
     @classmethod
     def get_mocker_key(cls, mock_str):
         if not mock_str.startswith('@'):
-            raise MockerExpressionException()
+            raise MockPyExpressionException()
         if not mock_str.endswith(')'):
             # 非)结尾说明是@date,则直接返回属性名
             return mock_str[1:]
@@ -75,19 +77,6 @@ class MockPy:
         number_str_max_length = None
 
         @classmethod
-        def boolean(cls, min_value=None, max_value=None, current=None):
-            min_value = 0 if inNone(min_value) else min_value
-            max_value = 1 if inNone(max_value) else max_value
-            current = True if inNone(current) else current
-            if min_value >= max_value:
-                raise MockerExpressionException()
-            luck_boolean_number = random.randint(min_value, max_value)
-            if luck_boolean_number == min_value:
-                return current
-            else:
-                return not current
-
-        @classmethod
         def number_str(cls, min_length=None, max_length=number_str_max_length) -> str:
             """
 
@@ -95,8 +84,7 @@ class MockPy:
             :param max_length:
             :return: 随机长度的数字字符
             """
-            if min_length >= max_length:
-                raise MockerExpressionException()
+            mock_exception.min_max_value_exception(max_length, min_length)
             if inNone(min_length):
                 min_length = random.randint(0, 15)
             if inNone(max_length):
@@ -109,51 +97,7 @@ class MockPy:
             return number_str
 
         @classmethod
-        def natural(cls, min_value=None, max_value=None) -> int:
-            """
-
-            :param min_value: 最小值,默认值:0
-            :param max_value: 最大值,默认值:9999999999999999
-            :return: 自然数
-            """
-            if inNone(min_value):
-                min_value = 0
-            if inNone(max_value):
-                max_value = 9999999999999999
-            if min_value >= max_value:
-                raise MockerExpressionException()
-            return random.randint(min_value, max_value)
-
-        @classmethod
-        def integer(cls, min_value=None, max_value=None) -> int:
-            """
-
-            :param min_value: 最小值,默认值:0
-            :param max_value: 最大值,默认值:9999999999999999
-            :return: 自然数[min_value,max_value]
-            """
-            if inNone(min_value):
-                min_value = -9999999999999999
-            if inNone(max_value):
-                max_value = 9999999999999999
-            if min_value > max_value:
-                raise MockerExpressionException()
-            elif min_value == max_value:
-                return min_value
-            return random.randint(min_value, max_value)
-
-        @classmethod
         def number_not_start_with_zero(cls, start_number: int, end_number: int) -> int:
-            """
-
-            :param end_number: 随机数的最大值,包含
-            :param start_number: 随机数的最小值,包含,默认=1
-            :return: 从1开始的整数类型的随机数;[start_number,end_number] 取值范围为闭区间
-            """
-            return random.randint(start_number if start_number != 0 else 1, end_number if end_number != 1 else 2)
-
-        @classmethod
-        def character(cls, start_number: int, end_number: int) -> int:
             """
 
             :param end_number: 随机数的最大值,包含
@@ -179,7 +123,7 @@ class MockPy:
             """
             # 判断是否满足表达式
             if not inNone(time_interval) and (len(time_interval) <= 1 or time_interval[:1] not in ('+', '-')):
-                raise MockerExpressionException(remark="The correct expression for time:'+1h' or '-1h'.")
+                raise MockPyExpressionException(remark="The correct expression for time:'+1h' or '-1h'.")
             # '@date("%Y.%m.%d %H:%M:%S","+1")'
             if inNone(format_str):
                 format_str = '%Y-%m-%d %H:%M:%S'
@@ -262,7 +206,7 @@ class MockPy:
         @classmethod
         def pick(cls, pick_list):
             if inNone(pick_list):
-                raise MockerExpressionException('pick_list cannot be empty.')
+                raise MockPyExpressionException('pick_list cannot be empty.')
             assert isinstance(pick_list, (str, list, tuple))
             if isinstance(pick_list, str):
                 pick_list = eval(pick_list)

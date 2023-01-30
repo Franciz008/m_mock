@@ -48,8 +48,65 @@ chinese = '一乙二十丁厂七卜人入八九几儿了力乃刀又三于干亏
 cn_punctuation = r"""。？！，、；：“”‘’『』「」（）[]〔〕【】——……·—-～《》〈〉___/"""
 
 
-class NumberOw:
-    pass
+class BooleanOw:
+    @classmethod
+    def boolean(cls, min_value=None, max_value=None, current=None):
+        mock_exception.min_max_value_exception(min_value, max_value)
+        if inNone((max_value, current)) and inNone(min_value) is False:
+            # 只输入min_value则返回True
+            return True
+        min_value = 0 if inNone(min_value) else min_value
+        max_value = 1 if inNone(max_value) else max_value
+        current = True if inNone(current) else current
+        luck_boolean_number = random.randint(min_value, max_value)
+        if luck_boolean_number == min_value:
+            return current
+        else:
+            return not current
+
+
+class NaturalOw:
+    @classmethod
+    def natural(cls, min_value=None, max_value=None) -> int:
+        """
+
+        :param min_value: 最小值,默认值:0
+        :param max_value: 最大值,默认值:9999999999999999
+        :return: 自然数
+        """
+        if inNone(min_value):
+            min_value = 0
+        if inNone(max_value):
+            max_value = 9999999999999999
+        mock_exception.min_max_value_exception(min_value, max_value)
+        return random.randint(min_value, max_value)
+
+
+class IntegerOw:
+    @classmethod
+    def integer(cls, min_value=None, max_value=None) -> int:
+        """
+
+        :param min_value: 最小值,默认值:0
+        :param max_value: 最大值,默认值:9999999999999999
+        :return: 自然数[min_value,max_value]
+        """
+        mock_exception.min_max_value_exception(min_value, max_value)
+        if inNone(min_value):
+            min_value = -9999999999999999
+        if inNone(max_value):
+            max_value = 9999999999999999
+        if min_value > max_value:
+            raise MockPyExpressionException()
+        return random.randint(min_value, max_value)
+
+
+class CharacterOw:
+    @classmethod
+    def character(cls, character_type=None):
+        character_type = random.choice(
+            ('lower', 'upper', 'number', 'symbol')) if character_type is None else character_type
+        return StringOw.string(character_type, 1)
 
 
 class FloatOw:
@@ -73,6 +130,7 @@ class FloatOw:
         def __luck():
             return random.randint(1, 4) in (1, 2, 3)
 
+        mock_exception.min_max_value_exception(min_value, max_value)
         if inNone(min_value):
             min_value = -9999999999999999
         if inNone(max_value):
@@ -112,6 +170,7 @@ class StringOw:
 
     @classmethod
     def get_random_string_by_source(cls, source=None, min_value: int = None, max_value: int = None) -> str:
+        mock_exception.min_max_value_exception(min_value, max_value)
         if inNone(min_value):
             length = random.randint(1, 9)
         elif inNone(max_value):
@@ -228,7 +287,7 @@ class StringOw:
             else:
                 return cls.get_random_string_by_source(string_type, *new_args)
         elif len(args) > 3:
-            raise MockerExpressionException('only 3 parameters are allowed.')
+            raise MockPyExpressionException('only 3 parameters are allowed.')
 
 
 string_ow = StringOw
