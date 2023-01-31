@@ -82,6 +82,40 @@ class NaturalOw:
         return random.randint(min_value, max_value)
 
 
+class NumberOw:
+    number_str_max_length = None
+
+    @classmethod
+    def number_str(cls, min_length=None, max_length=number_str_max_length) -> str:
+        """
+
+        :param min_length:
+        :param max_length:
+        :return: 随机长度的数字字符
+        """
+        mock_exception.min_max_value_exception(max_length, min_length)
+        if inNone(min_length):
+            min_length = random.randint(0, 15)
+        if inNone(max_length):
+            max_length = random.randint(min_length, 16)
+        number_string_list = []
+        range_size = cls.number_not_start_with_zero(min_length, max_length)
+        for kk in range(range_size):
+            number_string_list.append(str(random.randint(0, 9)))
+        number_str = ''.join(number_string_list)
+        return number_str
+
+    @classmethod
+    def number_not_start_with_zero(cls, start_number: int, end_number: int) -> int:
+        """
+
+        :param end_number: 随机数的最大值,包含
+        :param start_number: 随机数的最小值,包含,默认=1
+        :return: 从1开始的整数类型的随机数;[start_number,end_number] 取值范围为闭区间
+        """
+        return random.randint(start_number if start_number != 0 else 1, end_number if end_number != 1 else 2)
+
+
 class IntegerOw:
     @classmethod
     def integer(cls, min_value=None, max_value=None) -> int:
