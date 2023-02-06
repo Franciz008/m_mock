@@ -1,10 +1,10 @@
-from random_ow import basic
+import m_random
 from test_case.common_utils import execute
 
 
 class TestBasic:
     def test_basic_character(self):
-        print(basic.CharacterOw.character())
+        print(m_random.m_character.character())
         execute("@character()")
         execute("@character('lower')")
         execute("@character('upper')")
@@ -13,30 +13,30 @@ class TestBasic:
         execute("@character('aeiou')")
 
     def test_basic_integer(self):
-        print(basic.IntegerOw.integer())
+        print(m_random.m_integer.integer())
         execute("@integer(2,4)")
         execute("@integer(3)")
         execute("@integer()")
         execute("@integer(2,2)")
 
     def test_basic_boolean(self):
-        print(basic.BooleanOw.boolean())
+        print(m_random.m_boolean.boolean())
         execute("@boolean(2,4)")
         execute("@boolean(3)")
         execute("@boolean()")
         execute("@boolean(2,2)")
 
     def test_basic_float(self):
-        print(basic.FloatOw.float())
+        print(m_random.m_float.float())
         execute("@float(2,4)")
         execute("@float(3)")
         execute("@float()")
         execute("@float(2,2)")
 
     def test_basic_string(self):
-        print(basic.StringOw.string())
-        print(basic.StringOw.string(7))
-        print(basic.StringOw.string(7, 10))
+        print(m_random.m_string.string())
+        print(m_random.m_string.string(7))
+        print(m_random.m_string.string(7, 10))
         execute("@string(2)")
         execute('@string("lower", 3)')
         execute('@string("upper", 3)')

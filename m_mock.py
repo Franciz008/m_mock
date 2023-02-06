@@ -1,37 +1,31 @@
-import random
 import re
-from datetime import datetime, timedelta
 
-from random_ow import basic
-from random_ow.common import MockPyExpressionException
-from random_ow.date import date
-from random_ow.helper import helper
+import m_random
 
 
-class MockPy:
+class MockM:
 
     def mocker(self, mock_str):
         keyword = self.get_mocker_key(mock_str)
         args = self.get_mocker_params_to_tuple(mock_str)
         if keyword == 'date':
-            return date.date(*args)
+            return m_random.m_date.m_date(*args)
         elif keyword == 'time':
-            return date.time(*args)
+            return m_random.m_date.time(*args)
         elif keyword == 'float':
-            return basic.FloatOw.float(*args)
+            return m_random.m_float.float(*args)
         elif keyword == 'natural':
-            return basic.NaturalOw.natural(*args)
+            return m_random.m_natural.natural(*args)
         elif keyword == 'integer':
-            return basic.IntegerOw.integer(*args)
+            return m_random.m_integer.integer(*args)
         elif keyword == 'boolean':
-            return basic.BooleanOw.boolean(*args)
+            return m_random.m_boolean.boolean(*args)
         elif keyword == 'character':
-            return basic.CharacterOw.character(*args)
+            return m_random.m_character.character(*args)
         elif keyword == 'string':
-            return basic.StringOw.string(*args)
+            return m_random.m_string.string(*args)
         elif keyword == 'pick':
-            return helper.pick(*args)
-        return None
+            return m_random.m_helper.pick(*args)
 
     @classmethod
     def get_mocker_key(cls, mock_str):
@@ -66,4 +60,4 @@ class MockPy:
         return args
 
 
-mocker = MockPy()
+m_mock = MockM()

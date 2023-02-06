@@ -1,7 +1,55 @@
 import random
+import re
 import string
+from datetime import datetime, timedelta
 
-from random_ow.common import *
+
+def inNone(obj):
+    if isinstance(obj, (tuple, list)):
+        # 都为空的就返回True
+        boo = []
+        for i in obj:
+            boo.append(i in ('', None))
+        return False if False in boo else True
+    return obj in ('', None)
+
+
+def tuple_to_str(objects) -> str:
+    """
+    :param objects: 被转换的元组/列表
+    :return: 列表被转换后的字符串
+    """
+    return str(''.join(objects))
+
+
+def shuffle_string(strings):
+    """
+
+    :param strings: 被打乱的字符
+    :return: 打乱的字符
+    """
+    strings = list(strings)
+    random.shuffle(strings)
+    strings = ''.join(strings)
+    return strings
+
+
+class MockPyExpressionException(Exception):
+    def __init__(self, exception='Incorrect mocker expression is used.', remark=''):
+        super().__init__()
+        self.exception = f'{exception}{remark}'
+
+    def __str__(self):
+        return self.exception
+
+    @classmethod
+    def min_max_value_exception(cls, min_value, max_value):
+        if (max_value is None or min_value is None) is False:
+            if min_value >= max_value:
+                raise MockPyExpressionException('min_value cannot be greater than or equal to max_value.')
+
+
+mock_exception = MockPyExpressionException()
 
 chinese = '一乙二十丁厂七卜人入八九几儿了力乃刀又三于干亏士工土才寸下大丈与万上小口巾山千乞川亿个勺久凡及夕丸么广亡门义之尸弓己已' \
           '子卫也女飞刃习叉马乡丰王井开夫天无元专云扎艺木五支厅不太犬区历尤友匹车巨牙屯比互切瓦止少日中冈贝内水见午牛手毛气升长仁' \
@@ -48,7 +96,7 @@ chinese = '一乙二十丁厂七卜人入八九几儿了力乃刀又三于干亏
 cn_punctuation = r"""。？！，、；：“”‘’『』「」（）[]〔〕【】——……·—-～《》〈〉___/"""
 
 
-class BooleanOw:
+class BooleanM:
     @classmethod
     def boolean(cls, min_value=None, max_value=None, current=None):
         mock_exception.min_max_value_exception(min_value, max_value)
@@ -65,7 +113,10 @@ class BooleanOw:
             return not current
 
 
-class NaturalOw:
+m_boolean = BooleanM()
+
+
+class NaturalM:
     @classmethod
     def natural(cls, min_value=None, max_value=None) -> int:
         """
@@ -82,7 +133,10 @@ class NaturalOw:
         return random.randint(min_value, max_value)
 
 
-class NumberOw:
+m_natural = NaturalM()
+
+
+class NumberM:
     number_str_max_length = None
 
     @classmethod
@@ -116,7 +170,10 @@ class NumberOw:
         return random.randint(start_number if start_number != 0 else 1, end_number if end_number != 1 else 2)
 
 
-class IntegerOw:
+m_number = NumberM()
+
+
+class IntegerM:
     @classmethod
     def integer(cls, min_value=None, max_value=None) -> int:
         """
@@ -135,15 +192,21 @@ class IntegerOw:
         return random.randint(min_value, max_value)
 
 
-class CharacterOw:
+m_integer = IntegerM()
+
+
+class CharacterM:
     @classmethod
     def character(cls, character_type=None):
         character_type = random.choice(
             ('lower', 'upper', 'number', 'symbol')) if character_type is None else character_type
-        return StringOw.string(character_type, 1)
+        return StringM.string(character_type, 1)
 
 
-class FloatOw:
+m_character = CharacterM()
+
+
+class FloatM:
     @classmethod
     def float(cls, min_value=None, max_value=None, d_min_value=None,
               d_max_value=None):
@@ -174,7 +237,7 @@ class FloatOw:
         if inNone(d_max_value):
             min_d_max_value = d_min_value if 14 > d_min_value > 0 else d_min_value + 1
             d_max_value = random.randint(min_d_max_value + 1, 16)
-        decimals = StringOw.string_number(d_min_value, d_max_value)
+        decimals = StringM.string_number(d_min_value, d_max_value)
         if __luck():
             while True:
                 # 满足最小值和最大值的浮点数
@@ -194,7 +257,10 @@ class FloatOw:
         return float(round(random_float, round_num))
 
 
-class StringOw:
+m_float = FloatM()
+
+
+class StringM:
     @classmethod
     def string_lower(cls, min_value=None, max_value=None) -> str:
         """
@@ -324,4 +390,114 @@ class StringOw:
             raise MockPyExpressionException('only 3 parameters are allowed.')
 
 
-string_ow = StringOw
+m_string = StringM()
+
+
+class DateM:
+    @classmethod
+    def datetime(cls, format_str=None, time_interval: str = None):
+        """
+        example:
+        @date('%Y-%m-%d %H:%M:%S')  2022-12-09 16:50:00
+        @date('%Y-%m-%d %H:%M:%S','-1')  2022-12-08 16:50:00
+        @date('%Y-%m-%d %H-%M-%S')
+        @date()
+        :param format_str:
+        :param time_interval:'+1min'/'-1mil'
+        :return:
+        """
+        # 判断是否满足表达式
+        if not inNone(time_interval) and (len(time_interval) <= 1 or time_interval[:1] not in ('+', '-')):
+            raise MockPyExpressionException(remark="The correct expression for time:'+1h' or '-1h'.")
+        # '@date("%Y.%m.%d %H:%M:%S","+1")'
+        if inNone(format_str):
+            format_str = '%Y-%m-%d %H:%M:%S'
+        # 定义初始化变量
+        days = 0
+        seconds = 0
+        microseconds = 0
+        milliseconds = 0
+        minutes = 0
+        hours = 0
+        # 当前时间
+        curr_time = datetime.now()
+        today = (curr_time.strftime(format_str))
+        # 处理时间的计算
+        if not inNone(time_interval):
+            calculate = time_interval[:1]
+            # 正则获取时间单位
+            regular = '[a-zA-Z]+'  # 正则匹配英文
+            match = re.search(regular, time_interval)
+            group = match.group(0)
+            unit = group
+            # 时间的间隔量
+            amount = int(time_interval[1:-len(unit)])
+            # 处理时间的量
+            if 'hours'.startswith(unit):
+                hours = amount
+            elif 'minutes'.startswith(unit):
+                minutes = amount
+            elif 'milliseconds'.startswith(unit):
+                milliseconds = amount
+            elif 'microseconds'.startswith(unit):
+                microseconds = amount
+            elif 'seconds'.startswith(unit):
+                seconds = amount
+            elif 'days'.startswith(unit):
+                days = amount
+            timedelta_value = timedelta(days=days, seconds=seconds, microseconds=microseconds,
+                                        milliseconds=milliseconds, minutes=minutes, hours=hours)
+            if calculate == '+':
+                random_data = (curr_time + timedelta_value).strftime(format_str)
+                return random_data
+            elif calculate == '-':
+                random_data = (curr_time - timedelta_value).strftime(format_str)
+                return random_data
+        return today
+
+    @classmethod
+    def date(cls, format_str=None, time_interval: str = None):
+        """
+        example:
+        @date('%Y-%m-%d')  2022-12-09
+        @date('%Y-%m-%d','-1')  2022-12-08
+        @date()
+        可以传参'%Y-%m-%d %H:%M:%S'
+        :param format_str:'%Y-%m-%d';'%Y:%m:%d'/'%Y-%m-%d %H:%M:%S'
+        :param time_interval: 加或减
+        :return: 随机日期(年月日/年月日时分秒)
+        """
+        format_str = '%Y-%m-%d' if inNone(format_str) else format_str
+        return cls.datetime(format_str, time_interval)
+
+    @classmethod
+    def time(cls, format_str=None, time_interval: str = None):
+        """
+        example:
+        @time('%Y-%m-%d')  15:03:49
+        @time('%Y-%m-%d','-1')  2022-12-08
+        @time()
+        可以传参'%Y-%m-%d %H:%M:%S'
+        :param time_interval: 加或减
+        :param format_str:'%H:%M:%S'/'%Y:%m:%d';'%Y-%m-%d %H:%M:%S'
+        :return: 随机日期(时分秒/年月日时分秒)
+        """
+        format_str = '%H:%M:%S' if inNone(format_str) else format_str
+        return cls.datetime(format_str, time_interval=time_interval)
+
+
+m_date = DateM()
+
+
+class HelperM:
+    @classmethod
+    def pick(cls, pick_list):
+        if inNone(pick_list):
+            raise MockPyExpressionException('pick_list cannot be empty.')
+        assert isinstance(pick_list, (str, list, tuple))
+        if isinstance(pick_list, str):
+            pick_list = eval(pick_list)
+        return random.choice(pick_list)
+
+
+m_helper = HelperM()
