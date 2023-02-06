@@ -1,15 +1,15 @@
 import re
 
-import m_random
+from x_mock import m_random
 
 
 class MockM:
 
-    def mocker(self, mock_str):
+    def mock(self, mock_str):
         keyword = self.get_mocker_key(mock_str)
         args = self.get_mocker_params_to_tuple(mock_str)
         if keyword == 'date':
-            return m_random.m_date.m_date(*args)
+            return m_random.m_date.date(*args)
         elif keyword == 'time':
             return m_random.m_date.time(*args)
         elif keyword == 'float':
@@ -30,7 +30,7 @@ class MockM:
     @classmethod
     def get_mocker_key(cls, mock_str):
         if not mock_str.startswith('@'):
-            raise MockPyExpressionException()
+            raise m_random.MockPyExpressionException()
         if not mock_str.endswith(')'):
             # 非)结尾说明是@date,则直接返回属性名
             return mock_str[1:]
