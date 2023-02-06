@@ -49,7 +49,7 @@ class MockPyExpressionException(Exception):
                 raise MockPyExpressionException('min_value cannot be greater than or equal to max_value.')
 
 
-mock_exception = MockPyExpressionException()
+_mock_exception = MockPyExpressionException()
 
 chinese = '一乙二十丁厂七卜人入八九几儿了力乃刀又三于干亏士工土才寸下大丈与万上小口巾山千乞川亿个勺久凡及夕丸么广亡门义之尸弓己已' \
           '子卫也女飞刃习叉马乡丰王井开夫天无元专云扎艺木五支厅不太犬区历尤友匹车巨牙屯比互切瓦止少日中冈贝内水见午牛手毛气升长仁' \
@@ -99,7 +99,7 @@ cn_punctuation = r"""。？！，、；：“”‘’『』「」（）[]〔〕
 class BooleanM:
     @classmethod
     def boolean(cls, min_value=None, max_value=None, current=None):
-        mock_exception.min_max_value_exception(min_value, max_value)
+        _mock_exception.min_max_value_exception(min_value, max_value)
         if inNone((max_value, current)) and inNone(min_value) is False:
             # 只输入min_value则返回True
             return True
@@ -129,7 +129,7 @@ class NaturalM:
             min_value = 0
         if inNone(max_value):
             max_value = 9999999999999999
-        mock_exception.min_max_value_exception(min_value, max_value)
+        _mock_exception.min_max_value_exception(min_value, max_value)
         return random.randint(min_value, max_value)
 
 
@@ -147,7 +147,7 @@ class NumberM:
         :param max_length:
         :return: 随机长度的数字字符
         """
-        mock_exception.min_max_value_exception(max_length, min_length)
+        _mock_exception.min_max_value_exception(max_length, min_length)
         if inNone(min_length):
             min_length = random.randint(0, 15)
         if inNone(max_length):
@@ -182,7 +182,7 @@ class IntegerM:
         :param max_value: 最大值,默认值:9999999999999999
         :return: 自然数[min_value,max_value]
         """
-        mock_exception.min_max_value_exception(min_value, max_value)
+        _mock_exception.min_max_value_exception(min_value, max_value)
         if inNone(min_value):
             min_value = -9999999999999999
         if inNone(max_value):
@@ -227,7 +227,7 @@ class FloatM:
         def __luck():
             return random.randint(1, 4) in (1, 2, 3)
 
-        mock_exception.min_max_value_exception(min_value, max_value)
+        _mock_exception.min_max_value_exception(min_value, max_value)
         if inNone(min_value):
             min_value = -9999999999999999
         if inNone(max_value):
@@ -270,7 +270,7 @@ class StringM:
 
     @classmethod
     def get_random_string_by_source(cls, source=None, min_value: int = None, max_value: int = None) -> str:
-        mock_exception.min_max_value_exception(min_value, max_value)
+        _mock_exception.min_max_value_exception(min_value, max_value)
         if inNone(min_value):
             length = random.randint(1, 9)
         elif inNone(max_value):
