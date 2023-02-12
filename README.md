@@ -5,6 +5,7 @@
 ## Basic
 
 ### character
+
     m_mock.mock("@character()"):X
     m_mock.mock("@character('lower')"):f
     m_mock.mock("@character('upper')"):E
@@ -13,21 +14,25 @@
     m_mock.mock("@character('aeiou')"):o
 
 ### integer
+
     m_mock.mock("@integer(2,4)"):3
     m_mock.mock("@integer(3)"):4941869747671297
     m_mock.mock("@integer()"):-3191979912544874
 
 ### boolean
+
     m_mock.mock("@boolean(2,4)"):False
     m_mock.mock("@boolean(3)"):True
     m_mock.mock("@boolean()"):False
 
 ### float
+
     m_mock.mock("@float(2,4)"):2.937
     m_mock.mock("@float(3)"):229342892631770.44
     m_mock.mock("@float()"):872256.00439
 
 ### string
+
     m_mock.mock("@string(2)"):$@
     m_mock.mock("@string("lower", 3)"):nyx
     m_mock.mock("@string("upper", 3)"):HWS
@@ -43,3 +48,10 @@
     m_mock.mock("@string("cn_symbol", 1, 3)"):『“
     m_mock.mock("@string("cn_string", 3, 9)"):〕壁辨钻眠素举沾。
     m_mock.mock("@string("cn_string", 1)"):柔
+
+### name
+
+    m_mock.mock("@clast()"):胜赴
+    m_mock.mock("@cfirst()"):谭
+    m_mock.mock("@cname()"):和骗
+    m_mock.mock("@cname(3)"):董曲笋

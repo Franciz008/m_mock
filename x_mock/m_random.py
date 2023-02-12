@@ -3,6 +3,8 @@ import re
 import string
 from datetime import datetime, timedelta
 
+from x_mock.m_chinese_source import single_family_name
+
 
 def inNone(obj):
     if isinstance(obj, (tuple, list)):
@@ -320,7 +322,7 @@ class StringM:
     def chinese(cls, min_value=None, max_value=None) -> str:
         """
 
-        :return: 中文随机字符
+        :return: 纯中文随机字符
         """
         return cls.get_random_string_by_source(chinese, min_value, max_value)
 
@@ -501,3 +503,35 @@ class HelperM:
 
 
 m_helper = HelperM()
+
+
+class NameM:
+    @classmethod
+    def cfirst(cls):
+        """
+
+        :return: 获取中文姓名的首个字符-姓
+        """
+        return random.choice(single_family_name)
+
+    @classmethod
+    def clast(cls):
+        """
+
+        :return: 获取中文姓名的首个字符-名
+        """
+        return m_string.chinese(1, 2)
+
+    @classmethod
+    def cname(cls, length=None):
+        """
+
+        :return: 中文姓氏
+        """
+        length = random.randint(2, 3) if length is None else length
+        if 3 <= length < 2:
+            raise MockPyExpressionException()
+        return cls.cfirst() + m_string.chinese(length - 1)
+
+
+m_name = NameM()

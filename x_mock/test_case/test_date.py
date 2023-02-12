@@ -13,3 +13,6 @@ class TestDate:
         print(m_random.m_date.time('', '+2sec'))
         print(m_random.m_date.time('', '+4sec'))
         execute("@time('', '+4sec')")
+        execute("@time")
+
+
