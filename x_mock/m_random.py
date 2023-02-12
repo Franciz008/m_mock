@@ -24,13 +24,16 @@ def tuple_to_str(objects) -> str:
     return str(''.join(objects))
 
 
-def shuffle_string(strings):
+def shuffle_string(strings) -> str:
     """
 
-    :param strings: 被打乱的字符
+    :param strings: 被打乱的字符(str/list/tuple)
     :return: 打乱的字符
     """
-    strings = list(strings)
+    if isinstance(strings, (list, tuple)):
+        pass
+    elif isinstance(strings, str):
+        strings = list(strings)
     random.shuffle(strings)
     strings = ''.join(strings)
     return strings
