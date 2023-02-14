@@ -32,6 +32,12 @@ class MockM:
             return m_random.m_name.clast(*args)
         elif keyword == 'cname':
             return m_random.m_name.cname(*args)
+        elif keyword == 'first':
+            return m_random.m_name.first(*args)
+        elif keyword == 'last':
+            return m_random.m_name.last(*args)
+        elif keyword == 'name':
+            return m_random.m_name.name(*args)
 
     @classmethod
     def get_mocker_key(cls, mock_str):

@@ -3,7 +3,7 @@ import re
 import string
 from datetime import datetime, timedelta
 
-from x_mock.m_chinese_source import single_family_name
+from x_mock.m_random_source import single_family_name, en_family_name, en_name
 
 
 def inNone(obj):
@@ -509,6 +509,39 @@ m_helper = HelperM()
 
 
 class NameM:
+    @classmethod
+    def first(cls):
+        """
+
+        :return: 获取中文姓名的首个字符-姓
+        """
+        return random.choice(en_family_name)
+
+    @classmethod
+    def last(cls):
+        """
+
+        :return: 获取中文姓名的首个字符-名
+        """
+        return random.choice(en_name)
+
+    @classmethod
+    def name(cls, middle=None):
+        """
+
+        :return: 中文姓氏
+        """
+        if middle is not None and middle in ('true', 'True',True, '1', 1):
+            a = cls.first()
+            c = cls.last()
+            b = None
+            for i in range(20):
+                b = cls.first()
+                if cls.first() != a:
+                    break
+            return f'{a} {b} {c}'
+        return f'{cls.first()} {cls.last()}'
+
     @classmethod
     def cfirst(cls):
         """
