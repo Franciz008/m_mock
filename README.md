@@ -59,7 +59,7 @@ m_mock.mock("@string("cn_string", 3, 9)"):〕壁辨钻眠素举沾。
 m_mock.mock("@string("cn_string", 1)"):柔
 ```
 
-### name
+## name
 
 ```python
 m_mock.mock("@clast()"):折
@@ -72,7 +72,7 @@ m_mock.mock("@name()"):Jessica Jackson
 m_mock.mock("@name(True)"):Melissa Mark Davis
 ```
 
-### date
+## date
 
 ```python
 # %y 两位数的年份表示（00-99）
