@@ -4,7 +4,7 @@
 
 ## Basic
 
-### character
+### character 字符
 
 ```python
 m_mock.mock("@character()"):X
@@ -15,7 +15,7 @@ m_mock.mock("@character('symbol')"):)
 m_mock.mock("@character('aeiou')"):o
 ```
 
-### integer
+### integer 整数
 
 ```python
 m_mock.mock("@integer(2,4)"):3
@@ -23,7 +23,7 @@ m_mock.mock("@integer(3)"):4941869747671297
 m_mock.mock("@integer()"):-3191979912544874
 ```
 
-### boolean
+### boolean 布尔值
 
 ```python
 m_mock.mock("@boolean(2,4)"):False
@@ -31,7 +31,7 @@ m_mock.mock("@boolean(3)"):True
 m_mock.mock("@boolean()"):False
 ```
 
-### float
+### float 浮点数
 
 ```python
 m_mock.mock("@float(2,4)"):2.937
@@ -39,7 +39,7 @@ m_mock.mock("@float(3)"):229342892631770.44
 m_mock.mock("@float()"):872256.00439
 ```
 
-### string
+### string 字符串
 
 ```python
 m_mock.mock("@string(2)"):$@
@@ -59,7 +59,7 @@ m_mock.mock("@string("cn_string", 3, 9)"):〕壁辨钻眠素举沾。
 m_mock.mock("@string("cn_string", 1)"):柔
 ```
 
-## name
+## name 中英文姓名
 
 ```python
 m_mock.mock("@clast()"):折
@@ -72,7 +72,7 @@ m_mock.mock("@name()"):Jessica Jackson
 m_mock.mock("@name(True)"):Melissa Mark Davis
 ```
 
-## date
+## date 日期
 
 ```python
 # %y 两位数的年份表示（00-99）
