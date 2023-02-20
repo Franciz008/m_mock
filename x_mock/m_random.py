@@ -479,8 +479,9 @@ class DateM:
         today = (curr_time.strftime(format_str))
         # 处理时间的计算
         if not inNone(time_interval):
-            cls.datetime_calculate(curr_time, time_interval, format_str)
-        return today
+            return cls.datetime_calculate(curr_time, time_interval, format_str)
+        else:
+            return today
 
     @classmethod
     def date(cls, format_str=None, time_interval: str = None):
@@ -535,15 +536,30 @@ class DateM:
         return datetime.strftime(monday, format_str), datetime.strftime(sunday, format_str)
 
     @classmethod
-    def now(cls, unit: str, format_str='%Y-%m-%d %H:%M:%S'):
+    def now(cls, unit: str = None, format_str='%Y-%m-%d %H:%M:%S'):
+        default_format_str = '%Y-%m-%d %H:%M:%S'
         now = cls.date(format_str='%Y') + '-01-01 00:00:00'
         if unit == 'year':
-            return datetime.strptime(now, format_str)
+            return datetime.strptime(now, default_format_str).strftime(format_str)
         elif unit == 'month':
-            return datetime.strptime(cls.date(format_str='%Y-%m') + '-01 00:00:00', format_str)
+            return datetime.strptime(cls.date(format_str='%Y-%m') + '-01 00:00:00', default_format_str).strftime(
+                format_str)
         elif unit == 'week':
-            return datetime.strptime(cls.get_current_week()[1] + ' 00:00:00', format_str)
-        return cls.datetime()
+            # 当前日期的周日所在的日期
+            return datetime.strptime(cls.get_current_week()[1] + ' 00:00:00', default_format_str).strftime(format_str)
+        elif unit == 'day':
+            return datetime.strptime(cls.date(format_str='%Y-%m-%d') + ' 00:00:00', default_format_str).strftime(
+                format_str)
+        elif unit == 'hour':
+            return datetime.strptime(cls.date(format_str='%Y-%m-%d  %H') + ':00:00', default_format_str).strftime(
+                format_str)
+        elif unit == 'minute':
+            return datetime.strptime(cls.date(format_str='%Y-%m-%d  %H:%M') + ':00', default_format_str).strftime(
+                format_str)
+        elif unit == 'second':
+            return cls.datetime(format_str=format_str)
+        elif unit is None:
+            return cls.datetime(format_str=format_str)
 
 
 m_date = DateM()

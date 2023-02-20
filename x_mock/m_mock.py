@@ -12,6 +12,8 @@ class MockM:
             return m_random.m_date.date(*args)
         elif keyword == 'time':
             return m_random.m_date.time(*args)
+        elif keyword == 'now':
+            return m_random.m_date.now(*args)
         elif keyword == 'float':
             return m_random.m_float.float(*args)
         elif keyword == 'natural':

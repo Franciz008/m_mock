@@ -97,8 +97,23 @@ m_mock.mock("@name(True)"):Melissa Mark Davis
 # %X 本地相应的时间表示
 # %Z 当前时区的名称
 
-m_mock.mock("@date('%Y-%m-%d %H:%M:%S', '+1d')"):2023-02-13 15:51:42
-m_mock.mock("@date('%Y-%m-%d %H:%M:%S', '+24h')"):2023-02-13 15:51:42
+# date
+m_mock.mock("@date('%Y-%m-%d %H:%M:%S', '+1d')"):2023-02-21 13:50:02
+m_mock.mock("@date('%Y-%m-%d %H:%M:%S', '+24h')"):2023-02-21 13:50:02
+m_mock.mock("@date('%Y年-%m月-%d日 %H时:%M分:%S秒', '+2mon')"):2023年-04月-20日 13时:50分:02秒
+m_mock.mock("@date('%Y年-%m月-%d日 %H时:%M分:%S秒', '+2min')"):2023年-02月-20日 13时:52分:02秒
+# time
 m_mock.mock("@time('', '+4sec')"):15:51:46
 m_mock.mock("@time"):15:51:42
+# now
+m_mock.mock("@now('year')"):2023-01-01 00:00:00
+m_mock.mock("@now('month')"):2023-02-01 00:00:00
+m_mock.mock("@now('week')"):2023-02-26 00:00:00
+m_mock.mock("@now('day')"):2023-02-20 00:00:00
+m_mock.mock("@now('hour')"):2023-02-20 13:00:00
+m_mock.mock("@now('minute')"):2023-02-20 13:42:00
+m_mock.mock("@now('second')"):2023-02-20 13:42:44
+m_mock.mock("@now()"):2023-02-20 13:42:44
+m_mock.mock("@now('year','%Y年-%m月-%d日 %H:%M:%S')"):2023年-01月-01日 00:00:00
+m_mock.mock("@now('week','%Y年 %m月 %d日 %H:%M:%S')"):2023年 02月 26日 00:00:00
 ```
