@@ -15,4 +15,7 @@ class TestDate:
         execute("@time('', '+4sec')")
         execute("@time")
 
-
+    def test_now(self):
+        print(m_random.m_date.now('year'))
+        print(m_random.m_date.now('month'))
+        print(m_random.m_date.now('week'))

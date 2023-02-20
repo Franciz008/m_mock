@@ -3,6 +3,9 @@ import re
 import string
 from datetime import datetime, timedelta
 
+from PIL import Image
+from dateutil.relativedelta import relativedelta
+
 from x_mock.m_random_source import single_family_name, en_family_name, en_name
 
 
@@ -400,6 +403,60 @@ m_string = StringM()
 
 class DateM:
     @classmethod
+    def datetime_calculate(cls, date_time, time_interval, format_str=None):
+        """
+
+        :param date_time: 需要计算的日期时间
+        :param time_interval: 时间的计算量,例如:'+1min'
+        :param format_str: 时间的格式
+        :return:
+        """
+        # 定义初始化变量
+        days = 0
+        seconds = 0
+        microseconds = 0
+        milliseconds = 0
+        minutes = 0
+        hours = 0
+        month = 0
+        calculate = time_interval[:1]
+        # 正则获取时间单位
+        regular = '[a-zA-Z]+'  # 正则匹配英文
+        match = re.search(regular, time_interval)
+        group = match.group(0)
+        # 时间的单位:天/月/年
+        unit = group
+        # 时间的计算量
+        amount = int(time_interval[1:-len(unit)])
+        # 处理时间的量
+        if 'hours'.startswith(unit):
+            hours = amount
+        elif 'minutes'.startswith(unit):
+            minutes = amount
+        elif 'milliseconds'.startswith(unit):
+            milliseconds = amount
+        elif 'microseconds'.startswith(unit):
+            microseconds = amount
+        elif 'seconds'.startswith(unit):
+            seconds = amount
+        elif 'days'.startswith(unit):
+            days = amount
+        elif 'month'.startswith(unit):
+            data_result = (date_time + relativedelta(months=amount)).strftime(format_str)
+            return data_result
+        elif 'week'.startswith(unit):
+            data_result = (date_time + relativedelta(weeks=amount)).strftime(format_str)
+            return data_result
+        timedelta_value = timedelta(days=days, seconds=seconds, microseconds=microseconds,
+                                    milliseconds=milliseconds, minutes=minutes, hours=hours)
+        if calculate == '+':
+            data_result = (date_time + timedelta_value).strftime(format_str)
+            return data_result
+        elif calculate == '-':
+            data_result = (date_time - timedelta_value).strftime(format_str)
+            return data_result
+
+    @classmethod
     def datetime(cls, format_str=None, time_interval: str = None):
         """
         example:
@@ -417,47 +474,12 @@ class DateM:
         # '@date("%Y.%m.%d %H:%M:%S","+1")'
         if inNone(format_str):
             format_str = '%Y-%m-%d %H:%M:%S'
-        # 定义初始化变量
-        days = 0
-        seconds = 0
-        microseconds = 0
-        milliseconds = 0
-        minutes = 0
-        hours = 0
         # 当前时间
         curr_time = datetime.now()
         today = (curr_time.strftime(format_str))
         # 处理时间的计算
         if not inNone(time_interval):
-            calculate = time_interval[:1]
-            # 正则获取时间单位
-            regular = '[a-zA-Z]+'  # 正则匹配英文
-            match = re.search(regular, time_interval)
-            group = match.group(0)
-            unit = group
-            # 时间的间隔量
-            amount = int(time_interval[1:-len(unit)])
-            # 处理时间的量
-            if 'hours'.startswith(unit):
-                hours = amount
-            elif 'minutes'.startswith(unit):
-                minutes = amount
-            elif 'milliseconds'.startswith(unit):
-                milliseconds = amount
-            elif 'microseconds'.startswith(unit):
-                microseconds = amount
-            elif 'seconds'.startswith(unit):
-                seconds = amount
-            elif 'days'.startswith(unit):
-                days = amount
-            timedelta_value = timedelta(days=days, seconds=seconds, microseconds=microseconds,
-                                        milliseconds=milliseconds, minutes=minutes, hours=hours)
-            if calculate == '+':
-                random_data = (curr_time + timedelta_value).strftime(format_str)
-                return random_data
-            elif calculate == '-':
-                random_data = (curr_time - timedelta_value).strftime(format_str)
-                return random_data
+            cls.datetime_calculate(curr_time, time_interval, format_str)
         return today
 
     @classmethod
@@ -490,13 +512,52 @@ class DateM:
         format_str = '%H:%M:%S' if inNone(format_str) else format_str
         return cls.datetime(format_str, time_interval=time_interval)
 
+    @staticmethod
+    def get_current_week(date=None, format_str='%Y-%m-%d'):
+        """
+
+        :param format_str:
+        :param date: "2023-02-19",默认当前日期
+        :return: 指定日期所在周的的元祖:(周一的日期,周日的日期)
+        """
+        if date:
+            duty_date = datetime.strptime(str(date), format_str)
+            monday, sunday = duty_date, duty_date
+        else:
+            monday, sunday = datetime.today(), datetime.today()
+        one_day = timedelta(days=1)
+        while monday.weekday() != 0:
+            monday -= one_day
+        while sunday.weekday() != 6:
+            sunday += one_day
+        # return monday, sunday
+        # 返回时间字符串
+        return datetime.strftime(monday, format_str), datetime.strftime(sunday, format_str)
+
+    @classmethod
+    def now(cls, unit: str, format_str='%Y-%m-%d %H:%M:%S'):
+        now = cls.date(format_str='%Y') + '-01-01 00:00:00'
+        if unit == 'year':
+            return datetime.strptime(now, format_str)
+        elif unit == 'month':
+            return datetime.strptime(cls.date(format_str='%Y-%m') + '-01 00:00:00', format_str)
+        elif unit == 'week':
+            return datetime.strptime(cls.get_current_week()[1] + ' 00:00:00', format_str)
+        return cls.datetime()
+
 
 m_date = DateM()
 
 
 class HelperM:
+
     @classmethod
     def pick(cls, pick_list):
+        """
+        选择集合数据中的一个
+        :param pick_list: 字符串/列表/元祖
+        :return:
+        """
         if inNone(pick_list):
             raise MockPyExpressionException('pick_list cannot be empty.')
         assert isinstance(pick_list, (str, list, tuple))
@@ -509,6 +570,10 @@ m_helper = HelperM()
 
 
 class NameM:
+    """
+    生成随机姓名
+    """
+
     @classmethod
     def first(cls):
         """
@@ -531,7 +596,7 @@ class NameM:
 
         :return: 中文姓氏
         """
-        if middle is not None and middle in ('true', 'True',True, '1', 1):
+        if middle is not None and middle in ('true', 'True', True, '1', 1):
             a = cls.first()
             c = cls.last()
             b = None
@@ -571,3 +636,13 @@ class NameM:
 
 
 m_name = NameM()
+
+
+class ImageM:
+    @classmethod
+    def image(cls):
+        img = Image.new("RGB", (200, 300), (0, 0, 0))  # 8*8像素
+        img.save("./black.png")
+
+
+m_image = ImageM()
