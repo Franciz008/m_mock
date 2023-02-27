@@ -476,7 +476,7 @@ class DateM:
             format_str = '%Y-%m-%d %H:%M:%S'
         # 当前时间
         curr_time = datetime.now()
-        today = (curr_time.strftime(format_str))
+        today = curr_time.strftime(format_str)
         # 处理时间的计算
         if not inNone(time_interval):
             return cls.datetime_calculate(curr_time, time_interval, format_str)
@@ -493,7 +493,7 @@ class DateM:
         可以传参'%Y-%m-%d %H:%M:%S'
         :param format_str:'%Y-%m-%d';'%Y:%m:%d'/'%Y-%m-%d %H:%M:%S'
         :param time_interval: 加或减
-        :return: 随机日期(年月日/年月日时分秒)
+        :return: 随机日期(年月日/年月日时分秒),默认:2023-02-27
         """
         format_str = '%Y-%m-%d' if inNone(format_str) else format_str
         return cls.datetime(format_str, time_interval)
@@ -508,7 +508,7 @@ class DateM:
         可以传参'%Y-%m-%d %H:%M:%S'
         :param time_interval: 加或减
         :param format_str:'%H:%M:%S'/'%Y:%m:%d';'%Y-%m-%d %H:%M:%S'
-        :return: 随机日期(时分秒/年月日时分秒)
+        :return: 随机日期(时分秒/年月日时分秒),默认:21:43:47
         """
         format_str = '%H:%M:%S' if inNone(format_str) else format_str
         return cls.datetime(format_str, time_interval=time_interval)
@@ -537,6 +537,12 @@ class DateM:
 
     @classmethod
     def now(cls, unit: str = None, format_str='%Y-%m-%d %H:%M:%S'):
+        """
+
+        :param unit: 日期单位
+        :param format_str: 
+        :return: 当前时间:2023-02-27 21:43:47
+        """
         default_format_str = '%Y-%m-%d %H:%M:%S'
         now = cls.date(format_str='%Y') + '-01-01 00:00:00'
         if unit == 'year':

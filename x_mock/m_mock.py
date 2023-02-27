@@ -10,6 +10,8 @@ class MockM:
         args = self.get_mocker_params_to_tuple(mock_str)
         if keyword == 'date':
             return m_random.m_date.date(*args)
+        elif keyword == 'datetime':
+            return m_random.m_date.datetime(*args)
         elif keyword == 'time':
             return m_random.m_date.time(*args)
         elif keyword == 'now':
