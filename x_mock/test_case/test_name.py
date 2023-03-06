@@ -19,3 +19,9 @@ class TestName:
         print(m_name.last())
         print(m_name.name())
         print(m_name.name(True))
+
+    def test_name2(self):
+        for i in range(1000):
+            i = m_name.cname()
+            assert not '\n' in i
+            print(i)
