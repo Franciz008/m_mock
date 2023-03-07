@@ -3,7 +3,6 @@ import re
 import string
 from datetime import datetime, timedelta
 
-from PIL import Image
 from dateutil.relativedelta import relativedelta
 
 from x_mock.m_random_source import single_family_name, en_family_name, en_name
@@ -450,7 +449,8 @@ class DateM:
         elif 'days'.startswith(unit):
             days = amount
         elif 'month'.startswith(unit):
-            data_result = (date_time + relativedelta(months=amount)).strftime(format_str)
+            month = amount
+            data_result = (date_time + relativedelta(months=month)).strftime(format_str)
             return data_result
         elif 'week'.startswith(unit):
             data_result = (date_time + relativedelta(weeks=amount)).strftime(format_str)
@@ -669,17 +669,11 @@ class NameM:
 
 m_name = NameM()
 
-
-class ImageM:
-    @classmethod
-    def image(cls):
-        img = Image.new("RGB", (200, 300), (0, 0, 0))  # 8*8像素
-        img.save("./black.png")
-
-
-m_image = ImageM()
-lists = list(chinese)
-n = 50
-list2 = [lists[i:i + n] for i in range(0, len(lists), n)]
-for i in list2:
-    print(f'"{"".join(i)}" \\')
+# class ImageM:
+#     @classmethod
+#     def image(cls):
+#         img = Image.new("RGB", (200, 300), (0, 0, 0))  # 8*8像素
+#         img.save("./black.png")
+#
+#
+# m_image = ImageM()
