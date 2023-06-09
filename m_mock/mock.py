@@ -1,6 +1,6 @@
 import re
 
-from x_mock import m_random
+from m_mock import m_random
 
 
 class MockM:
@@ -42,6 +42,8 @@ class MockM:
             return m_random.m_name.last(*args)
         elif keyword == 'name':
             return m_random.m_name.name(*args)
+        else:
+            return mock_str
 
     @classmethod
     def get_mocker_key(cls, mock_str):

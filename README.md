@@ -1,3 +1,6 @@
+# v1.3.2更改了方法名称
+更新后需要更改原方法的import
+
 # install
 pip install m-mock
 
@@ -45,21 +48,22 @@ m_mock.mock("@float()"):872256.00439
 ### string 字符串
 
 ```python
-m_mock.mock("@string(2)"):$@
-m_mock.mock("@string("lower", 3)"):nyx
-m_mock.mock("@string("upper", 3)"):HWS
-m_mock.mock("@string("number", 3)"):987
-m_mock.mock("@string("symbol", 3)"):^)<
-m_mock.mock("@string("aeiou", 3)"):iee
-m_mock.mock("@string("lower", 1, 3)"):gn
-m_mock.mock("@string("upper", 1, 3)"):DSZ
-m_mock.mock("@string("number", 1, 3)"):773
-m_mock.mock("@string("symbol", 1, 3)"):#(<
-m_mock.mock("@string("aeiou", 1, 3)"):eaa
-m_mock.mock("@string("chinese", 1, 3)"):太主截
-m_mock.mock("@string("cn_symbol", 1, 3)"):『“
-m_mock.mock("@string("cn_string", 3, 9)"):〕壁辨钻眠素举沾。
-m_mock.mock("@string("cn_string", 1)"):柔
+m_mock.mock('@string(2)'):W3
+m_mock.mock('@string('lower', 3)'):icz
+m_mock.mock('@string('upper', 3)'):NBE
+m_mock.mock('@string('number', 3)'):108
+m_mock.mock('@string('symbol', 3)'):!%=
+m_mock.mock('@string('aeiou', 3)'):eia
+m_mock.mock('@string('lower', 1, 3)'):fih
+m_mock.mock('@string('upper', 1, 3)'):F
+m_mock.mock('@string('number', 1, 3)'):102
+m_mock.mock('@string('symbol', 1, 3)'):`
+m_mock.mock('@string('aeiou', 1, 3)'):aao
+m_mock.mock('@string('chinese', 1, 3)'):捎创
+m_mock.mock('@string('cn_symbol', 1, 3)'):～
+m_mock.mock('@string('cn_string', 3, 9)'):〉·，（鉴或【落【
+m_mock.mock('@string('cn_string', 1)'):侄
+m_mock.mock('@string('abcd', 2)'):bd
 ```
 
 ## name 中英文姓名

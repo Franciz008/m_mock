@@ -1,8 +1,8 @@
 [project]
 name = "m_mock"
-version = "1.3.1"
+version = "1.3.2"
 authors = [
-    { name = "Franciz", email = "912953887@qq.com" },
+    { name = "Franciz", email = "franciz467@163.com" },
 ]
 description = "This is a tool for producing random data."
 readme = "README.md"
@@ -13,5 +13,5 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "docutils >= 0.19"
+    "python-dateutil >= 2.8.2"
 ]

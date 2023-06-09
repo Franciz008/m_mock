@@ -1,8 +1,10 @@
-from x_mock.m_random import m_name
-from x_mock.test_case.common_utils import execute
+import unittest
+
+from m_mock.m_random import m_name
+from m_mock.test_case.common_utils import execute
 
 
-class TestName:
+class TestName(unittest.TestCase):
     def test_name(self):
         execute("""@clast()""")
         execute("""@cfirst()""")

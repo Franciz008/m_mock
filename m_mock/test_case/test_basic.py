@@ -1,8 +1,10 @@
-from x_mock import m_random
-from x_mock.test_case.common_utils import execute
+import unittest
+
+from m_mock import m_random
+from m_mock.test_case.common_utils import execute
 
 
-class TestBasic:
+class TestBasic(unittest.TestCase):
     def test_basic_character(self):
         print(m_random.m_character.character())
         execute("@character()")
@@ -38,17 +40,18 @@ class TestBasic:
         print(m_random.m_string.string(7))
         print(m_random.m_string.string(7, 10))
         execute("@string(2)")
-        execute('@string("lower", 3)')
-        execute('@string("upper", 3)')
-        execute('@string("number", 3)')
-        execute('@string("symbol", 3)')
-        execute('@string("aeiou", 3)')
-        execute('@string("lower", 1, 3)')
-        execute('@string("upper", 1, 3)')
-        execute('@string("number", 1, 3)')
-        execute('@string("symbol", 1, 3)')
-        execute('@string("aeiou", 1, 3)')
-        execute('@string("chinese", 1, 3)')
-        execute('@string("cn_symbol", 1, 3)')
-        execute('@string("cn_string", 3, 9)')
-        execute('@string("cn_string", 1)')
+        execute("@string('lower', 3)")
+        execute("@string('upper', 3)")
+        execute("@string('number', 3)")
+        execute("@string('symbol', 3)")
+        execute("@string('aeiou', 3)")
+        execute("@string('lower', 1, 3)")
+        execute("@string('upper', 1, 3)")
+        execute("@string('number', 1, 3)")
+        execute("@string('symbol', 1, 3)")
+        execute("@string('aeiou', 1, 3)")
+        execute("@string('chinese', 1, 3)")
+        execute("@string('cn_symbol', 1, 3)")
+        execute("@string('cn_string', 3, 9)")
+        execute("@string('cn_string', 1)")
+        execute("@string('abcd', 2)")

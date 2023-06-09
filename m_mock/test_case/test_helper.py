@@ -1,5 +1,5 @@
-from x_mock import m_random
-from x_mock.test_case.common_utils import execute
+from m_mock import m_random
+from m_mock.test_case.common_utils import execute
 
 
 class TestHelper:
